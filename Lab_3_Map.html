@@ -65,10 +65,38 @@
         fillOpacity: 0.7
       };
     }
+	function highlightFeature(e) {
+		const layer = e.target;
+
+		layer.setStyle({
+			weight: 5,
+			color: 'white',
+			fillOpacity: 0.9
+		});
+
+		layer.bringToFront();
+
+		//info.update(layer.feature.properties); //we will use this in a bit.
+	}
+	
+	function resetHighlight(e) {
+		geojson.resetStyle(e.target);
+		//info.update();
+	}
+	
+	function onEachFeature(feature, layer) {
+		layer.on({
+			mouseover: highlightFeature,
+			mouseout: resetHighlight,
+			//click: zoomToFeature
+		});
+	
+	
   
-    const IllinoisGeoJSON = L.geoJson(IllinoisGJSON, {
-      style
-    }).addTo(map);
+    const geojson = L.geoJson(IllinoisGJSON, {
+					style,
+					onEachFeature //This is the important new function connection 
+			}).addTo(map);
   
     var legend = L.control({position: 'bottomright'});
   
